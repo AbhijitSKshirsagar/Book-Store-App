@@ -16,5 +16,4 @@ public interface IOrderService {
 
     public Order deleteOrderRecord(Integer id);
 
-    public  Order cancelOrder(Integer id);
 }
