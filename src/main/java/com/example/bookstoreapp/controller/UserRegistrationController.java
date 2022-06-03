@@ -55,13 +55,6 @@ public class UserRegistrationController {
     }
 
 
-    @PostMapping("/forgotPassword")
-    public ResponseEntity<String> forgotPassword(@RequestParam String email, @RequestParam String password) {
-        String resp = userRegistrationService.forgotPassword(email,password);
-        return new ResponseEntity(resp, HttpStatus.OK);
-    }
-
-
     @PutMapping("/update/{id}")
     public ResponseEntity<String> updateRecordById(@PathVariable Integer id,@Valid @RequestBody UserDTO userDTO){
         UserRegistration entity = userRegistrationService.updateRecordById(id,userDTO);
