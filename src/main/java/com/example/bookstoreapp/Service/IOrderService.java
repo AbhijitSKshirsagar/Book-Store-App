@@ -6,14 +6,9 @@ import java.util.List;
 
 public interface IOrderService {
 
-    public com.example.bookstoreapp.model.Order insertOrder(OrderDTO orderdto);
-
-    public List<Order> getAllOrderRecords();
-
-    public Order getOrderRecord(Integer id);
-
-    public Order updateOrderRecord(Integer id, OrderDTO dto);
-
-    public Order deleteOrderRecord(Integer id);
-
+    String insertOrder(OrderDTO orderdto);
+    List <Order> getOrderRecord(String token);
+    List<Order> getAllOrderRecords(String token);
+    Order cancelOrder(String token,int userId);
 }
+

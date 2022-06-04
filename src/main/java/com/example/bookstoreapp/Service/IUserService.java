@@ -8,6 +8,9 @@ import com.example.bookstoreapp.model.UserRegistration;
 import java.util.List;
 
 public interface IUserService {
+
+    String verifyUser(String token);
+
     String addUser(UserDTO userDTO);
 
     List<UserRegistration> getAllUsers();

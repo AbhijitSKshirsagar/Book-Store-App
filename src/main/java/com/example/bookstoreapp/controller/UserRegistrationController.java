@@ -62,5 +62,16 @@ public class UserRegistrationController {
         return new ResponseEntity(dto,HttpStatus.ACCEPTED);
     }
 
+    @GetMapping("/verify/{token}")
+    ResponseEntity<ResponseDTO> verifyUser(@Valid @PathVariable String token) {
+        String userVerification = userRegistrationService.verifyUser(token);
+        if (userVerification != null) {
+            ResponseDTO responseDTO = new ResponseDTO("User verified :", userVerification);
+            return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+        } else {
+            ResponseDTO responseDTO = new ResponseDTO("User Not verified data:", userVerification);
+            return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+        }
+    }
 }
 

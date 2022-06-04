@@ -27,13 +27,23 @@ public class UserService implements IUserService {
     TokenUtility util;
 
     @Override
+    public String verifyUser(String token) {
+        int id = Math.toIntExact(util.decodeToken(token));
+        Optional<UserRegistration> user = userRepository.findById(id);
+
+        if (user.isPresent()) {
+            return user.toString();
+        } else
+            return null;
+    }
+    @Override
     public String addUser(UserDTO userDTO) {
         UserRegistration newUser= new UserRegistration(userDTO);
         userRepository.save(newUser);
         String token = util.createToken(newUser.getUserId());
         mailService.sendEmail(newUser.getEmail(), "Test Email", "Registered SuccessFully, hii: "
                 +newUser.getFirstName()+"Please Click here to get data-> "
-                +"http://localhost:8088/user/getBy/"+token);
+                +"http://localhost:8088/user/verify/"+token);
         return token;
     }
 
@@ -49,7 +59,7 @@ public class UserService implements IUserService {
         if(getUser.isPresent()){
             mailService.sendEmail("kshirsagarabhijit360@gmail.com", "Test Email", "Get your data with this token, hii: "
                     +getUser.get().getEmail()+"Please Click here to get data-> "
-                    +"http://localhost:8088/user/getBy/"+token);
+                    +"http://localhost:8088/user/verify/"+token);
             return getUser;
 
         }

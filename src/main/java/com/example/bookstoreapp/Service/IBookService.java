@@ -7,15 +7,17 @@ import java.util.List;
 
 public interface IBookService {
 
-    Book createBook(BookDTO bookDTO);
+    String createBook(BookDTO bookDTO);
 
-    Book getBookDataById(int BookId);
+    Book getBookDataById(String token);
 
-    List<Book> getAllBookData();
+    List<Book> getAllBookData(String token);
 
-    Book updateRecordById(Integer BookId, BookDTO bookDTO);
+    Book updataBooksByQuantity(String token, int quantity);
 
-    Object deleteRecordById(int BookId);
+    Book updateRecordById(String token, BookDTO bookDTO);
+
+    String deleteRecordById(String token);
 
     List<Book> getBookByName(String bookName);
 

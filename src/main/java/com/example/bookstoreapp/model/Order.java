@@ -1,6 +1,6 @@
 package com.example.bookstoreapp.model;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -18,15 +18,20 @@ public class Order {
     private Integer price;
     private Integer quantity;
     private String address;
-    @ManyToOne
+    @JsonIgnoreProperties(value = {"applications", "hibernateLazyInitializer"})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="userId")
     private UserRegistration user;
-    @ManyToOne
+    @JsonIgnoreProperties(value = {"applications", "hibernateLazyInitializer"})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="bookId")
     private Book book;
     private boolean cancel;
 
-    public Order(Integer orderID,Integer price, Integer quantity, String address, Book book, UserRegistration user, boolean cancel) {
+    public Order() {
+    }
+
+    public Order(Integer orderID,Integer price, Integer quantity, String address, Book book, UserRegistration user, boolean cancel,String email) {
         this.orderID = orderID;
         this.price=price;
         this.quantity=quantity;
@@ -34,10 +39,6 @@ public class Order {
         this.book = book;
         this.user=user;
         this.cancel = cancel;
-    }
-
-    public Order() {
-        super();
     }
 
     public Order(Integer price, Integer quantity, String address, Book book, UserRegistration user, boolean cancel) {
@@ -48,4 +49,5 @@ public class Order {
         this.user=user;
         this.cancel = cancel;
     }
+
 }
