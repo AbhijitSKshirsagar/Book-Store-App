@@ -57,19 +57,6 @@ public class BookService implements IBookService{
         }
     }
 
-    @Override
-    public Book updataBooksByQuantity(String token, int quantity) {
-        int id = utility.decodeToken(token);
-        Optional<Book> book = bookStoreRepository.findById(id);
-        if (book.isPresent()) {
-            Book booksData = new Book();
-            booksData.setQuantity(quantity);
-            bookStoreRepository.save(booksData);
-            return booksData;
-        } else {
-            throw new BookStoreException("Bookdata record does not found");
-        }
-    }
 
     @Override
     public Book updateRecordById(String token, BookDTO bookDTO) {

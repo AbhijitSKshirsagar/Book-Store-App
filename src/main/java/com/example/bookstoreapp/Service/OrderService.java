@@ -50,7 +50,7 @@ public class OrderService implements IOrderService {
                 String token = util.createToken(newOrder.getOrderID());
                 mailService.sendEmail(newOrder.getUser().getEmail(), "Test Email", "Registered SuccessFully, hii: "
                         + newOrder.getOrderID() + "Please Click here to get data-> "
-                        + "http://localhost:8088/order/insert/" + token);
+                        + "http://localhost:8088/order/getAllOrder/" + token);
                 log.info("Order record inserted successfully");
                 return token;
             } else {
@@ -88,7 +88,7 @@ public class OrderService implements IOrderService {
             log.info("ALL order records retrieved successfully");
             mailService.sendEmail("kshirsagarabhijit360@gmail.com", "Test Email", "Get your data with this token, hii: "
                     + orderData.get().getUser().getEmail() + "Please Click here to get all data-> "
-                    + "http://localhost:8088/order/retrieve/" + token);
+                    + "http://localhost:8088/order/getAllOrder/" + token);
             return listOrderData;
         } else {
             System.out.println("Exception ...Token not found!");
@@ -106,8 +106,7 @@ public class OrderService implements IOrderService {
             order.get().setCancel(true);
             orderRepo.save(order.get());
             mailService.sendEmail(order.get().getUser().getEmail(), "Test Email", "canceled order SuccessFully, hii: "
-                    +order.get().getOrderID()+"Please Click here to get data of updated id-> "
-                    +"http://localhost:8088/order/get/"+token);
+                    +order.get().getOrderID());
             return order.get();
         } else {
             throw new BookStoreException("Order Record doesn't exists");

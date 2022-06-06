@@ -4,15 +4,17 @@ import com.example.bookstoreapp.dto.CartDTO;
 import com.example.bookstoreapp.dto.ResponseDTO;
 import com.example.bookstoreapp.model.Cart;
 
+import java.util.List;
+
 public interface ICartService {
-    Cart insertItems(CartDTO cartdto);
-    Cart getCartDetailsById(Integer cartId);
+    String insertItems(CartDTO cartdto) ;
 
-    Cart deleteCartItemById(Integer cartId);
+    Cart getCartDetailsById(String token);
 
-    Cart updateRecordById(Integer cartId, CartDTO cartDTO);
+    List<Cart> getCartDetails(String token);
 
-    Cart getCartRecordByBookId(Integer bookID);
+    Cart updateRecordById(String token, CartDTO cartDTO);
 
-    ResponseDTO getCartDetails();
+
+    void deleteCartItemById(String token);
 }

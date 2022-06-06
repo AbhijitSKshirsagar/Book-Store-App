@@ -59,7 +59,7 @@ public class UserService implements IUserService {
         if(getUser.isPresent()){
             mailService.sendEmail("kshirsagarabhijit360@gmail.com", "Test Email", "Get your data with this token, hii: "
                     +getUser.get().getEmail()+"Please Click here to get data-> "
-                    +"http://localhost:8088/user/verify/"+token);
+                    +"http://localhost:8088/user/getAll/"+token);
             return getUser;
 
         }
@@ -117,7 +117,7 @@ public class UserService implements IUserService {
             UserRegistration newBook = new UserRegistration(updateUser.get().getUserId(),userDTO);
             userRepository.save(newBook);
             String token = util.createToken(newBook.getUserId());
-            mailService.sendEmail(newBook.getEmail(),"Welcome "+newBook.getFirstName(),"Click here \n http://localhost:8088/user/getBy/"+token);
+            mailService.sendEmail(newBook.getEmail(),"Welcome "+newBook.getFirstName(),"Click here \n http://localhost:8088/user/update/"+token);
             return newBook;
         }
         throw new BookStoreException("Book Details for email not found");

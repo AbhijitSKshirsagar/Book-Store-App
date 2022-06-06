@@ -13,8 +13,6 @@ public interface IBookService {
 
     List<Book> getAllBookData(String token);
 
-    Book updataBooksByQuantity(String token, int quantity);
-
     Book updateRecordById(String token, BookDTO bookDTO);
 
     String deleteRecordById(String token);

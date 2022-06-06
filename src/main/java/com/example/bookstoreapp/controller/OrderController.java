@@ -30,7 +30,7 @@ public class OrderController {
     }
 
 
-    @GetMapping("/getall{tokan}")
+    @GetMapping("/getAllOrder/{tokan}")
     public ResponseEntity<ResponseDTO> getAllOrderRecords(@PathVariable String token) {
         List<Order> newOrder = orderService.getAllOrderRecords(token);
         ResponseDTO dto = new ResponseDTO("All records retrieved successfully !", newOrder);

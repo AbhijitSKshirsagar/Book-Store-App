@@ -1,7 +1,6 @@
 package com.example.bookstoreapp.Service;
 
 import com.example.bookstoreapp.dto.CartDTO;
-import com.example.bookstoreapp.dto.ResponseDTO;
 import com.example.bookstoreapp.exception.BookStoreException;
 import com.example.bookstoreapp.model.Book;
 import com.example.bookstoreapp.model.Cart;
@@ -9,6 +8,8 @@ import com.example.bookstoreapp.model.UserRegistration;
 import com.example.bookstoreapp.repository.BookRepository;
 import com.example.bookstoreapp.repository.CartRepository;
 import com.example.bookstoreapp.repository.UserRegistrationRepository;
+import com.example.bookstoreapp.util.EmailSenderService;
+import com.example.bookstoreapp.util.TokenUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,39 +30,44 @@ public class CartService implements ICartService {
     @Autowired
     CartRepository bookStoreCartRepository;
 
+    @Autowired
+    EmailSenderService mailService;
+
+    @Autowired
+    TokenUtility util;
+
     @Override
-    public Cart insertItems(CartDTO cartdto) {
+    public String insertItems(CartDTO cartdto) {
         Optional<Book> book = bookStoreRepository.findById(cartdto.getBookId());
         Optional<UserRegistration> userRegistration = userRepository.findById(cartdto.getUserId());
         if (book.isPresent() && userRegistration.isPresent()) {
             Cart newCart = new Cart(cartdto.getQuantity(), book.get(), userRegistration.get());
             bookStoreCartRepository.save(newCart);
-            return newCart;
+            String token = util.createToken(newCart.getCartId());
+            return token;
         } else {
             throw new BookStoreException("Book or User does not exists");
         }
     }
 
     @Override
-    public ResponseDTO getCartDetails() {
-        List<Cart> getCartDetails=bookStoreCartRepository.findAll();
-        ResponseDTO dto= new ResponseDTO();
-        if (getCartDetails.isEmpty()){
-            String   message=" Not found Any Cart details ";
-            dto.setMessage(message);
-            dto.setData(0);
-            return dto;
-        }
-        else {
-            dto.setMessage("the list of cart items is sucussfully retrived");
-            dto.setData(getCartDetails);
-            return dto;
+    public List<Cart> getCartDetails(String token) {
+        int id = util.decodeToken(token);
+        Optional<Cart> cartData = bookStoreCartRepository.findById(id);
+        if (cartData.isPresent()) {
+            List<Cart> listOfCartdata = bookStoreCartRepository.findAll();
+            log.info("ALL cart records retrieved successfully");
+            return listOfCartdata;
+        } else {
+            System.out.println("Exception ...Token not found!");
+            return null;
         }
     }
 
     @Override
-    public Cart getCartDetailsById(Integer cartId) {
-        Optional<Cart> getCartData=bookStoreCartRepository.findById(cartId);
+    public Cart getCartDetailsById(String token) {
+        int id = util.decodeToken(token);
+        Optional<Cart> getCartData=bookStoreCartRepository.findById(id);
         if (getCartData.isPresent()){
             return getCartData.get();
         }
@@ -69,44 +75,30 @@ public class CartService implements ICartService {
             throw new BookStoreException(" Didn't find any record for this particular cartId");
         }
     }
-    public Cart getCartRecordByBookId(Integer bookId) {
-        Optional<Cart> cart = bookStoreCartRepository.findByBookId(bookId);
-        if(cart.isPresent()) {
-            log.info("Cart record retrieved successfully for book id "+bookId);
-            return cart.get();
-
-        }
-        else {
-            return null;
-            //throw new BookStoreException("Cart Record doesn't exists");
-        }
-    }
 
     @Override
-    public Cart deleteCartItemById(Integer cartId) {
-        Optional<Cart> deleteData=bookStoreCartRepository.findById(cartId);
-        if (deleteData.isPresent()){
-            bookStoreCartRepository.deleteById(cartId);
-            return deleteData.get();
-        }
-        else {
+    public void deleteCartItemById(String token) {
+        int id = util.decodeToken(token);
+        Optional<Cart> delete = bookStoreCartRepository.findById(id);
+        if (delete.isPresent()) {
+            bookStoreCartRepository.deleteById(id);
+        } else {
             throw new BookStoreException(" Did not get any cart for specific cart id ");
         }
-
     }
 
-
     @Override
-    public Cart updateRecordById(Integer cartId, CartDTO cartDTO) {
-        Optional<Cart> cart = bookStoreCartRepository.findById(cartId);
+    public Cart updateRecordById(String token, CartDTO cartDTO) {
+        int id = util.decodeToken(token);
+        Optional<Cart> cart = bookStoreCartRepository.findById(id);
         Optional<Book>  book = bookStoreRepository.findById(cartDTO.getBookId());
         Optional<UserRegistration> user = userRepository.findById(cartDTO.getUserId());
         if(cart.isPresent()) {
             if(book.isPresent() && user.isPresent()) {
-                Cart newCart = new Cart(cartId,cartDTO.getQuantity(),book.get(),user.get());
-                bookStoreCartRepository.save(newCart);
-                log.info("Cart record updated successfully for id "+cartId);
-                return newCart;
+                Cart cartData = new Cart(id, cartDTO.getQuantity(),book.get(), user.get());
+                bookStoreCartRepository.save(cartData);
+                log.info("Cart record updated successfully for id "+id);
+                return cartData;
             }
             else {
                 throw new BookStoreException("Book or User doesn't exists");
