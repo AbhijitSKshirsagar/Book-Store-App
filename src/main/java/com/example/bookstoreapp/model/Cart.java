@@ -9,16 +9,16 @@ import javax.persistence.*;
 public class Cart {
     @Id
     @GeneratedValue
-    private Integer cartId;
+    public int cartId;
     @ManyToOne
     @JoinColumn(name = "userId")
-    private UserRegistration user;
+    public UserRegistration user;
     @ManyToOne
     @JoinColumn(name = "bookId")
-    private Book book;
-    private Integer quantity;
+    public Book book;
+    public int quantity;
 
-    public Cart(Integer cartId, Integer quantity, Book book, UserRegistration user) {
+    public Cart(int cartId, int quantity, Book book, UserRegistration user) {
         super();
         this.cartId = cartId;
         this.quantity = quantity;
@@ -26,7 +26,7 @@ public class Cart {
         this.user = user;
     }
 
-    public Cart(Integer quantity, Book book, UserRegistration user) {
+    public Cart(int quantity, Book book, UserRegistration user) {
         super();
         this.quantity = quantity;
         this.book = book;

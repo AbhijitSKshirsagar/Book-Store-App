@@ -7,9 +7,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
+//@Repository
 public interface UserRegistrationRepository extends JpaRepository<UserRegistration, Integer> {
     @Query(value = "SELECT * FROM user_registration where email=:email_Id", nativeQuery = true)
     public Optional<UserRegistration> findByEmailid(String email_Id);
 
+    @Query(value = "SELECT * FROM user_registration where email=:email_Id and password =:password", nativeQuery = true)
+    Optional<UserRegistration> findByEmailId(String email_Id, String password);
 }

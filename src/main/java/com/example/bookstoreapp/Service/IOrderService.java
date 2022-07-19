@@ -10,5 +10,7 @@ public interface IOrderService {
     List <Order> getOrderRecord(String token);
     List<Order> getAllOrderRecords(String token);
     Order cancelOrder(String token,int userId);
+    public List<Order> getAllOrderRecord() ;
+    public List<Order> getOrderRecords(int id);
 }
 

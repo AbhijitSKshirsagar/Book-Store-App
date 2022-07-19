@@ -6,6 +6,7 @@ import com.example.bookstoreapp.dto.UserLoginDTO;
 import com.example.bookstoreapp.model.UserRegistration;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IUserService {
 
@@ -15,9 +16,11 @@ public interface IUserService {
 
     List<UserRegistration> getAllUsers();
 
-    ResponseDTO loginUser(UserLoginDTO userLoginDTO);
+    public Optional<UserRegistration> userLogin(UserLoginDTO userLoginDTO);
 
     Object getUserByToken(String token);
+
+    UserRegistration getUserByid(int id);
 
     String forgotPassword(String email, String password);
 
@@ -28,5 +31,7 @@ public interface IUserService {
     List<UserRegistration> getAllUserDataByToken(String token);
 
     UserRegistration updateRecordById(Integer id, UserDTO userDTO);
+
+
 
 }

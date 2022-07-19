@@ -7,7 +7,7 @@ import com.example.bookstoreapp.model.Cart;
 import java.util.List;
 
 public interface ICartService {
-    String insertItems(CartDTO cartdto) ;
+    public Cart insertItems(CartDTO cartdto) ;
 
     Cart getCartDetailsById(String token);
 
@@ -17,4 +17,23 @@ public interface ICartService {
 
 
     void deleteCartItemById(String token);
+
+    public void deleteCart(int cartId);
+
+    public Cart updateCartQuantity(int cartId, int quantity);
+
+    public Cart getCartById(int cartId);
+
+    public Iterable<Cart> findAllCarts();
+
+    public List<Cart>getCartData();
+
+    public String insertItem(CartDTO cartdto);
+
+    public Cart updateQuantity(int cartId, int quantity);
+
+   // public Cart updateQuantity(CartDTO quantity);
+
+   public Cart Update(int id ,CartDTO cartDTO);
+
 }

@@ -8,13 +8,17 @@ import com.example.bookstoreapp.model.UserRegistration;
 import com.example.bookstoreapp.repository.UserRegistrationRepository;
 import com.example.bookstoreapp.util.EmailSenderService;
 import com.example.bookstoreapp.util.TokenUtility;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-
+@Slf4j
 @Service
 public class UserService implements IUserService {
     @Autowired
@@ -69,24 +73,16 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ResponseDTO loginUser(UserLoginDTO userLoginDTO) {
-        ResponseDTO dto = new ResponseDTO();
-        Optional<UserRegistration> login = userRepository.findByEmailid(userLoginDTO.getEmail());
-        if(login.isPresent()){
-            String pass = login.get().getPassword();
-            if(login.get().getPassword().equals(userLoginDTO.getPassword())){
-                dto.setMessage("login successful ");
-                dto.setData(login.get());
-                return dto;
-            }
-
-            else {
-                dto.setMessage("Sorry! login is unsuccessful");
-                dto.setData("Wrong password");
-                return dto;
-            }
-        }
-        return new ResponseDTO("User not found!","Wrong email");
+    public Optional<UserRegistration> userLogin(UserLoginDTO userLoginDTO) {
+       // ResponseDTO dto = new ResponseDTO();
+        Optional<UserRegistration> login = userRepository.findByEmailId(userLoginDTO.getEmail(),userLoginDTO.getPassword());
+        if (login.isPresent()) {
+            log.info("LOGIN SUCCESSFUL");
+            return login;
+       } else {
+           System.out.println("User not Found Exception:");
+           throw (new BookStoreException("Record not Found"));
+       }
     }
 
     @Override
@@ -146,5 +142,9 @@ public class UserService implements IUserService {
             return newBook;
         }
         throw new BookStoreException("User Details for id not found");
+    }
+    @Override
+    public UserRegistration getUserByid(int id) {
+        return userRepository.findById(id).orElseThrow(() -> new BookStoreException("User  with id " + id + " does not exist in database..!"));  
     }
 }

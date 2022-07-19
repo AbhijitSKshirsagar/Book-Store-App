@@ -13,20 +13,20 @@ public class Order {
 
     @Id
     @GeneratedValue
-    private Integer orderID;
-    private LocalDate date = LocalDate.now();
-    private Integer price;
-    private Integer quantity;
-    private String address;
+    public Integer orderID;
+    public LocalDate date = LocalDate.now();
+    public Integer price;
+    public Integer quantity;
+    public String address;
     @JsonIgnoreProperties(value = {"applications", "hibernateLazyInitializer"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="userId")
-    private UserRegistration user;
+    public UserRegistration user;
     @JsonIgnoreProperties(value = {"applications", "hibernateLazyInitializer"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="bookId")
-    private Book book;
-    private boolean cancel;
+    public Book book;
+    public boolean cancel;
 
     public Order() {
     }

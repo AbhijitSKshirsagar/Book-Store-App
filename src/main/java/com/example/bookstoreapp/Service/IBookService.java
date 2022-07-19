@@ -25,4 +25,13 @@ public interface IBookService {
 
     List<Book> getBookByAuthorName(String authorName);
 
+    public List<Book> getBookData();
+
+    public Book createBookData(BookDTO bookDTO);
+
+    public void deleteBookData(int Id);
+
+    public Book getBookDataById(int Id);
+
+
 }

@@ -8,9 +8,9 @@ import javax.validation.constraints.NotEmpty;
 @Data
 public class UserLoginDTO {
     @Email
-    private String email;
+    public String email;
     @NotEmpty(message = "Password cant be null")
-    private String password;
+    public String password;
     public UserLoginDTO(String email,String password){
         this.email=email;
         this.password=password;

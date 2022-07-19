@@ -7,12 +7,12 @@ import javax.validation.constraints.NotEmpty;
 @Data
 public class OrderDTO {
 
-    private int quantity;
-    @NotEmpty(message="Please provide address")
-    private String address;
-    private Integer userId;
-    private Integer bookId;
-    private boolean cancel;
-    private int price;
+    public int quantity;
+   // @NotEmpty(message="Please provide address")
+    public String address;
+    public Integer userId;
+    public Integer bookId;
+    public boolean cancel;
+    public int price;
 
 }

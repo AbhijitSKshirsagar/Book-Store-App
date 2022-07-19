@@ -5,6 +5,7 @@ import com.example.bookstoreapp.Service.IUserService;
 import com.example.bookstoreapp.dto.ResponseDTO;
 import com.example.bookstoreapp.dto.UserDTO;
 import com.example.bookstoreapp.dto.UserLoginDTO;
+import com.example.bookstoreapp.exception.BookStoreException;
 import com.example.bookstoreapp.model.UserRegistration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 /**
  *  1) @RestController :-
  *           @RestController is used for making restful web services with the help of the @RestController annotation.
@@ -23,6 +25,7 @@ import java.util.List;
  *
  * - Created controller so that we can perform rest api calls
  */
+@CrossOrigin(allowedHeaders = "*", origins = "*")
 @RestController
 @RequestMapping("/user")
 /**
@@ -53,7 +56,15 @@ public class UserRegistrationController {
 
     @PostMapping("/login")
     public ResponseEntity<ResponseDTO> userLogin(@RequestBody UserLoginDTO userLoginDTO) {
-        return new ResponseEntity<ResponseDTO>(userRegistrationService.loginUser(userLoginDTO),HttpStatus.OK);
+        Optional<UserRegistration> login = userRegistrationService.userLogin(userLoginDTO);
+        if (login != null) {
+            ResponseDTO responseDTO = new ResponseDTO("LOGIN SUCCESSFUL", login);
+            return new ResponseEntity<ResponseDTO>(responseDTO,HttpStatus.ACCEPTED);
+        } else {
+            ResponseDTO responseDTO = new ResponseDTO("User login not successfully", login);
+            throw (new BookStoreException("Record not Found"));
+        }
+    
     }
     /**
      * - Ability to get all book' data by findAll() method
@@ -121,5 +132,10 @@ public class UserRegistrationController {
             return new ResponseEntity<>(responseDTO, HttpStatus.OK);
         }
     }
+
+    // @GetMapping("/getByUserId/{token}")
+    // ResponseEntity<ResponseDTO> UserId(@PathVariable String token) {
+        // 
+    // }
 }
 

@@ -23,6 +23,7 @@ import java.util.List;
  *
  * - Created controller so that we can perform rest api calls
  */
+@CrossOrigin(allowedHeaders = "*", origins = "*")
 @RestController
 @RequestMapping("/book")
 public class BookController {
@@ -104,4 +105,36 @@ public class BookController {
         ResponseDTO dto = new ResponseDTO("Data retrieved successfully (:",listOfBooks);
         return new ResponseEntity(dto,HttpStatus.OK);
     }
+
+    @GetMapping("/GetAll")
+    public ResponseEntity<ResponseDTO> getBookData() {
+        List<Book> BookList = null ;
+        BookList = bookService.getBookData();
+        ResponseDTO respDTO = new ResponseDTO("Get Call Successful",BookList);
+        return new ResponseEntity<ResponseDTO>(respDTO, HttpStatus.OK);
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<ResponseDTO> createBookData(@Valid @RequestBody BookDTO bookDTO) {
+        Book Data = null;
+        Data = bookService.createBookData(bookDTO);
+        ResponseDTO respDTO = new ResponseDTO("Created Employee Payroll Data Successful",Data);
+        return new ResponseEntity<ResponseDTO>(respDTO,HttpStatus.OK);
+    }
+
+    @DeleteMapping("/Delete/{Id}")
+    public ResponseEntity<ResponseDTO> deleteEmployeePayrollData(@PathVariable("Id") int Id) {
+        bookService.deleteBookData(Id);
+        ResponseDTO respDTO = new ResponseDTO("Deleted Successfully ","Deleted id : " +Id);
+        return new ResponseEntity<ResponseDTO>(respDTO ,HttpStatus.OK);
+    }
+
+    @GetMapping("/search/{Id}")
+    public ResponseEntity<ResponseDTO> getBookData(@PathVariable("Id")int Id) {
+        Book Data=null;
+        Data =  bookService.getBookDataById(Id);
+        ResponseDTO respDTO = new ResponseDTO("Get Call For ID Successful",Data);
+        return new ResponseEntity<ResponseDTO>(respDTO, HttpStatus.OK);
+    }
+
 }

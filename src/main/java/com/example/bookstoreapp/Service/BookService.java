@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -115,5 +115,27 @@ public class BookService implements IBookService{
         return findBook;
     }
 
+    private List<Book> bookList = new ArrayList<>();
+
+    public List<Book> getBookData(){
+        return bookStoreRepository.findAll();
+    }
+
+    public Book createBookData(BookDTO bookDTO){
+        Book Data = null;
+        Data = new Book(bookDTO);
+        return bookStoreRepository.save(Data);
+    }
+
+    public void deleteBookData(int Id) {
+        Book Data = this.getBookDataById(Id);
+        bookStoreRepository.delete(Data);
+    }
+
+    public Book getBookDataById(int Id){
+        return bookStoreRepository
+                .findById(Id)
+                .orElseThrow(()->new BookStoreException("Book with BookId "+Id + "does not exists...!!"));
+    }
 
 }
